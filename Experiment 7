@@ -114,5 +114,4 @@ int main()
             printf("\nInvalid choice! Try again.\n");
         }
     }
-    return 0;
 }
