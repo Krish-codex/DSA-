@@ -43,7 +43,8 @@ int main()
     char ch, x;
 
     printf("Enter an infix expression: ");
-    gets(infix);
+    fgets(infix, MAX, stdin);
+    infix[strcspn(infix, "\n")] = '\0';  // Remove newline from fgets input
 
     while ((ch = infix[i++]) != '\0')
     {
@@ -73,5 +74,4 @@ int main()
 
     postfix[j] = '\0';
     printf("\nPostfix Expression: %s\n", postfix);
-
 }
