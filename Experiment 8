@@ -44,8 +44,7 @@ int main()
 
     printf("Enter an infix expression: ");
     fgets(infix, MAX, stdin);
-    infix[strcspn(infix, "\n")] = '\0';  // Remove newline from fgets input
-
+    infix[strcspn(infix, "\n")] = '\0';  
     while ((ch = infix[i++]) != '\0')
     {
         if (isalnum(ch))
