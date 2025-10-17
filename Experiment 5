@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Day 
+{
+    char *dayName;
+    int date;
+    char *activity;
+};
+
+struct Day* create() 
+{
+    struct Day *week;
+    week = (struct Day*)malloc(7*sizeof(struct Day));
+    return week;
+}
+
+
+void read(struct Day *week) 
+{
+    int i;
+    for (i = 0; i < 7; i++) 
+    {
+        week[i].dayName = (char*)malloc(20*sizeof(char));
+        week[i].activity = (char*)malloc(100*sizeof(char));
+
+        printf("Enter name of day %d: ", i + 1);
+        scanf("%s", week[i].dayName);
+
+        printf("Enter date for %s: ", week[i].dayName);
+        scanf("%d", &week[i].date);
+
+        printf("Enter activity for %s: ", week[i].dayName);
+        getchar();
+        scanf("%[^\n]", week[i].activity);
+    }
+}
+
+void display(struct Day *week) 
+{
+    int i;
+    printf("\nWEEK ACTIVITY DETAILS:\n");
+    for (i = 0; i < 7; i++) 
+    {
+        printf("%s (%d): %s\n", week[i].dayName, week[i].date, week[i].activity);
+    }
+}
+
+int main() 
+{
+    struct Day *week;
+    int i;
+
+    printf("\nCreate Your Weekly Calendar\n");
+
+    week = create();
+    read(week);
+    display(week);
+
+    for (i = 0; i < 7; i++) 
+    {
+        free(week[i].dayName);
+        free(week[i].activity);
+    }
+    free(week);
+
+}
