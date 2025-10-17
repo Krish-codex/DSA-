@@ -1,0 +1,181 @@
+#include &lt;stdio.h&gt;
+
+#include &lt;stdlib.h&gt;
+
+struct node
+
+{
+
+int val;
+
+struct node *l, *r;
+
+};
+
+struct node* makeNode(int x)
+
+{
+
+struct node* p = (struct node*)malloc(sizeof(struct node));
+
+p-&gt;val = x;
+
+p-&gt;l = p-&gt;r = NULL;
+
+return p;
+
+}
+
+struct node* insert(struct node* root, int x)
+
+{
+
+if (root == NULL) return makeNode(x);
+
+if (x &lt; root-&gt;val)
+
+root-&gt;l = insert(root-&gt;l, x);
+
+else if (x &gt; root-&gt;val)
+
+root-&gt;r = insert(root-&gt;r, x);
+
+return root;
+
+}
+
+struct node* minNode(struct node* t)
+
+{
+
+while (t &amp;&amp; t-&gt;l != NULL)
+
+{
+
+t = t-&gt;l;
+
+}
+
+return t;
+
+}
+
+struct node* delNode(struct node* root, int x)
+
+{
+
+if (root == NULL) return NULL;
+
+if (x &lt; root-&gt;val)
+
+{
+
+root-&gt;l = delNode(root-&gt;l, x);
+
+}
+
+else if (x &gt; root-&gt;val)
+
+{
+
+root-&gt;r = delNode(root-&gt;r, x);
+
+}
+
+else {
+
+if (root-&gt;l == NULL)
+
+{
+
+struct node* tmp = root-&gt;r;
+
+free(root);
+
+return tmp;
+
+}
+
+else if (root-&gt;r == NULL)
+
+{
+
+struct node* tmp = root-&gt;l;
+
+free(root);
+
+return tmp;
+
+}
+
+struct node* tmp = minNode(root-&gt;r);
+
+root-&gt;val = tmp-&gt;val;
+
+root-&gt;r = delNode(root-&gt;r, tmp-&gt;val);
+
+}
+
+return root;
+
+}
+
+void inorder(struct node* root)
+
+{
+
+if (root != NULL)
+
+{
+
+inorder(root-&gt;l);
+
+printf(&quot;%d &quot;, root-&gt;val);
+
+inorder(root-&gt;r);
+
+}
+
+}
+
+int main()
+
+{
+
+struct node* root = NULL;
+
+int n, x;
+
+printf(&quot;How many nodes? &quot;);
+
+scanf(&quot;%d&quot;, &amp;n);
+
+printf(&quot;Enter %d values:\n&quot;, n);
+
+for (int i = 0; i &lt; n; i++)
+
+{
+
+scanf(&quot;%d&quot;, &amp;x);
+
+root = insert(root, x);
+
+}
+
+printf(&quot;\nInorder traversal: &quot;);
+
+inorder(root);
+
+printf(&quot;\nValue to remove: &quot;);
+
+scanf(&quot;%d&quot;, &amp;x);
+
+root = delNode(root, x);
+
+printf(&quot;After deletion: &quot;);
+
+inorder(root);
+
+printf(&quot;\n&quot;);
+
+}
