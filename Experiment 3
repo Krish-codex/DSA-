@@ -1,181 +1,90 @@
-#include &lt;stdio.h&gt;
-
-#include &lt;stdlib.h&gt;
-
+#include <stdio.h>
+#include <stdlib.h>
 struct node
-
 {
-
 int val;
-
 struct node *l, *r;
-
 };
-
 struct node* makeNode(int x)
-
 {
-
 struct node* p = (struct node*)malloc(sizeof(struct node));
-
-p-&gt;val = x;
-
-p-&gt;l = p-&gt;r = NULL;
-
+p->val = x;
+p->l = p->r = NULL;
 return p;
-
 }
-
 struct node* insert(struct node* root, int x)
-
-{
-
+{ 
 if (root == NULL) return makeNode(x);
-
-if (x &lt; root-&gt;val)
-
-root-&gt;l = insert(root-&gt;l, x);
-
-else if (x &gt; root-&gt;val)
-
-root-&gt;r = insert(root-&gt;r, x);
-
+if (x < root->val)
+root->l = insert(root->l, x);
+else if (x > root->val)
+root->r = insert(root->r, x);
 return root;
-
 }
-
 struct node* minNode(struct node* t)
-
 {
-
-while (t &amp;&amp; t-&gt;l != NULL)
-
+while (t && t->l != NULL)
 {
-
-t = t-&gt;l;
-
+t = t->l;
 }
-
 return t;
-
 }
-
 struct node* delNode(struct node* root, int x)
-
 {
-
 if (root == NULL) return NULL;
-
-if (x &lt; root-&gt;val)
-
+if (x < root->val)
 {
-
-root-&gt;l = delNode(root-&gt;l, x);
-
+root->l = delNode(root->l, x);
 }
-
-else if (x &gt; root-&gt;val)
-
+else if (x > root->val)
 {
-
-root-&gt;r = delNode(root-&gt;r, x);
-
+root->r = delNode(root->r, x);
 }
-
 else {
-
-if (root-&gt;l == NULL)
-
+if (root->l == NULL)
 {
-
-struct node* tmp = root-&gt;r;
-
+struct node* tmp = root->r;
 free(root);
-
 return tmp;
-
 }
-
-else if (root-&gt;r == NULL)
-
+else if (root->r == NULL)
 {
-
-struct node* tmp = root-&gt;l;
-
+struct node* tmp = root->l;
 free(root);
-
 return tmp;
-
 }
-
-struct node* tmp = minNode(root-&gt;r);
-
-root-&gt;val = tmp-&gt;val;
-
-root-&gt;r = delNode(root-&gt;r, tmp-&gt;val);
-
+struct node* tmp = minNode(root->r);
+root->val = tmp->val;
+root->r = delNode(root->r, tmp->val);
 }
-
 return root;
-
 }
-
 void inorder(struct node* root)
-
 {
-
 if (root != NULL)
-
 {
-
-inorder(root-&gt;l);
-
-printf(&quot;%d &quot;, root-&gt;val);
-
-inorder(root-&gt;r);
-
+inorder(root->l);
+printf("%d ", root->val);
+inorder(root->r);
 }
-
 }
-
 int main()
-
 {
-
 struct node* root = NULL;
-
 int n, x;
-
-printf(&quot;How many nodes? &quot;);
-
-scanf(&quot;%d&quot;, &amp;n);
-
-printf(&quot;Enter %d values:\n&quot;, n);
-
-for (int i = 0; i &lt; n; i++)
-
+printf("How many nodes? ");
+scanf("%d", &n);
+printf("Enter %d values:\n", n);
+for (int i = 0; i < n; i++)
 {
-
-scanf(&quot;%d&quot;, &amp;x);
-
+scanf("%d", &x);
 root = insert(root, x);
-
 }
-
-printf(&quot;\nInorder traversal: &quot;);
-
-inorder(root);
-
-printf(&quot;\nValue to remove: &quot;);
-
-scanf(&quot;%d&quot;, &amp;x);
-
+printf("\nInorder traversal: ");
+inorder(root);printf("\nValue to remove: ");
+scanf("%d", &x);
 root = delNode(root, x);
-
-printf(&quot;After deletion: &quot;);
-
+printf("After deletion: ");
 inorder(root);
-
-printf(&quot;\n&quot;);
-
+printf("\n");
 }
