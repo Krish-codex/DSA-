@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <string.h>
+#define MAXN 20      // maximum number of cities
+#define MAXLEN 32    // maximum length of city name
+int g[MAXN][MAXN];   // adjacency matrix
+char name[MAXN][MAXLEN];  // city names
+int n;               // total number of cities
+int visited[MAXN];   // visited array for traversals
+int queue[MAXN];     // queue for BFS
+int front, rear;     // queue pointers
+// Function to find index of city name
+int idx_of(const char *s) 
+{
+    for (int i = 0; i < n; i++)
+        if (strcmp(name[i], s) == 0) 
+            return i;
+    return -1;  // if not found
+}
+// Reset all visited flags
+void reset_vis(void) 
+{
+    for (int i = 0; i < n; i++) 
+        visited[i] = 0;
+}
+// Breadth First Search
+void bfs(int start) 
+{
+    reset_vis();        // mark all as unvisited initially
+    front = rear = 0;   // initialize queue
+    queue[rear++] = start;
+    visited[start] = 1;
+    printf("BFS Traversal: %s", name[start]);
+    while (front < rear) {  // process until queue empty
+        int v = queue[front++];   // dequeue
+        for (int i = 0; i < n; i++) {
+            if (g[v][i] && !visited[i]) {  // if neighbor not visited
+                visited[i] = 1;
+                queue[rear++] = i;
+                printf(" -> %s", name[i]);
+            }
+        }
+    }
+    printf("\n");
+}
+// Depth First Search (recursive helper)
+void dfs_util(int v) 
+{
+    visited[v] = 1;
+    printf("%s ", name[v]);
+    for (int i = 0; i < n; i++) {
+        if (g[v][i] && !visited[i])
+            dfs_util(i);  // visit unvisited neighbor
+    }
+}
+// DFS main function
+void dfs(int start) 
+{
+    reset_vis();
+    printf("DFS Traversal: ");
+    dfs_util(start);
+    printf("\n");
+}
+// Main function to create graph and perform traversals
+int main(void) 
+{
+    int i, j, startIdx;
+    char startName[MAXLEN];
+    printf("Enter number of cities (<= %d): ", MAXN);
+    scanf("%d", &n);
+    printf("Enter city names:\n");
+    for (i = 0; i < n; i++) 
+        scanf("%s", name[i]);
+    printf("Enter adjacency matrix (%d x %d):\n", n, n);
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            scanf("%d", &g[i][j]);
+    printf("Enter starting city name: ");
+    scanf("%s", startName);
+    startIdx = idx_of(startName);
+    if (startIdx == -1) {   // invalid name
+        printf("City not found.\n");
+        return 0;
+    }
+    bfs(startIdx);  // perform BFS
+    dfs(startIdx);  // perform DFS
+}
