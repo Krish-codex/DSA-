@@ -1,0 +1,102 @@
+#include <stdio.h>
+#define MAX 5   // maximum size of the circular queue
+char q[MAX];
+int front = -1, rear = -1;  // front and rear pointers
+// Function to check if queue is empty
+int isEmpty(void) 
+{ 
+    return front == -1; 
+}
+// Function to check if queue is full
+int isFull(void) 
+{ 
+    return (front == 0 && rear == MAX-1) || ((rear + 1) % MAX == front); 
+}
+// Function to insert a new character into queue
+void enqueue(char x) 
+{
+    if (isFull()) 
+    { // no space left
+        printf("\nOverflow: queue is full.");
+        return;
+    }
+    if (isEmpty()) // first element to be inserted
+        front = 0;
+    rear = (rear + 1) % MAX; // move rear circularly
+    q[rear] = x;
+    printf("\n'%c' inserted.", x);
+}
+// Function to delete a character from queue
+void dequeue(void) 
+{
+    if (isEmpty()) 
+    { // nothing to delete
+        printf("\nUnderflow: queue is empty.");
+        return;
+    }
+    printf("\n'%c' deleted.", q[front]);
+    if (front == rear)  // only one element was present
+        front = rear = -1;
+    else
+        front = (front + 1) % MAX;  // move front circularly
+}
+// Function to display current queue elements
+void display(void) 
+{
+    if (isEmpty()) 
+    {
+        printf("\nQueue is empty.");
+        return;
+    }
+    printf("\nQueue: ");
+    int i = front;
+    while (1) {
+        printf("%c ", q[i]);  // print each element
+        if (i == rear) break;
+        i = (i + 1) % MAX;
+    }
+}
+// Main function with menu-driven operations
+int main(void) 
+{
+    int ch;
+    char x;
+    do 
+    {
+        printf("\n\nCircular Queue (Chars)");
+        printf("\n1. Insert");
+        printf("\n2. Delete");
+        printf("\n3. Display");
+        printf("\n4. Check Overflow/Underflow (demo)");
+        printf("\n5. Exit");
+        printf("\nEnter choice: ");
+        if (scanf("%d", &ch) != 1) return 0;  // input validation
+        switch (ch) 
+        {
+            case 1:
+                printf("Enter a character: ");
+                scanf(" %c", &x);   // space before %c removes newline issue
+                enqueue(x);
+                break;
+            case 2:
+                dequeue();
+                break;
+            case 3:
+                display();
+                break;
+            case 4: // check queue condition manually
+                if (isFull())  
+                    printf("\nStatus: Overflow (queue full).");
+                else if (isEmpty()) 
+                    printf("\nStatus: Underflow (queue empty).");
+                else 
+                    printf("\nStatus: Normal (can insert/delete).");
+                break;
+            case 5:
+                printf("\nExiting...");
+                break;
+            default:
+                printf("\nInvalid choice.");
+        }
+    } while (ch != 5);
+}
